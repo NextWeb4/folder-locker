@@ -1,0 +1,24 @@
+[project]
+name = "folder-locker"
+version = "1.0.0"
+description = "Offline folder locker with AES-256-GCM encrypted containers and optional Windows ACL quick lock"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "HaoXiang Huang", email = "didadida1688@gmail.com" }
+]
+keywords = ["folder-locker", "encryption", "aes-gcm", "tkinter", "windows", "ntfs"]
+dependencies = [
+  "cryptography>=42"
+]
+
+[project.urls]
+Homepage = "https://nextweb4.github.io/"
+Repository = "https://github.com/NextWeb4/folder-locker"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

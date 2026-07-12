@@ -1,0 +1,55 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*token*
+*secret*
+*credentials*
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+*.egg-info/
+
+# JavaScript and framework caches
+node_modules/
+.cache/
+.turbo/
+.next/cache/
+
+# Build and release output
+dist/
+build/
+release/
+release-assets/
+target/
+bin/
+obj/
+*.spec
+
+# Runtime metadata and logs
+*.folderlock.json
+*.locked
+*.tmp
+logs/
+*.log
+tmp/
+temp/
+*.bak
+*.backup
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
