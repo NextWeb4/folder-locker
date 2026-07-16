@@ -1,135 +1,139 @@
+[English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 # Folder Locker
 
-## 中文
+An offline Windows folder-protection application with authenticated encrypted containers and an optional NTFS quick-lock mode.
 
-Folder Locker 是一个离线 Windows 文件夹上锁工具，包含两种模式：
+![Last commit](https://img.shields.io/github/last-commit/NextWeb4/folder-locker?style=flat-square)
+![Repository size](https://img.shields.io/github/repo-size/NextWeb4/folder-locker?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/NextWeb4/folder-locker?style=flat-square)
+![Python 3.10 or newer](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![MIT License](https://img.shields.io/github/license/NextWeb4/folder-locker?style=flat-square)
 
-1. **强加密容器模式（推荐）**：把文件夹内容复制进 `.locked` 容器，使用 PBKDF2-HMAC-SHA256 派生密钥，并用 AES-256-GCM 流式加密文件名和文件数据。
-2. **Windows 快速权限锁模式（高级）**：使用 NTFS ACL deny 权限和文件名混淆快速限制当前用户访问。此模式不是加密。
+## Protection Modes
 
-强加密容器模式会保留原文件夹，避免误操作导致数据丢失。请先确认容器可以成功解密恢复，再自行删除原文件夹。
+### Encrypted container (recommended)
 
-### 功能特点
+Folder Locker copies a source folder into a `.locked` container. It derives a key with PBKDF2-HMAC-SHA256 and streams filenames and file data through AES-256-GCM authenticated encryption.
 
-- 创建 AES-256-GCM `.locked` 加密容器。
-- 从 `.locked` 容器恢复文件夹。
-- 支持旧版容器读取。
-- Windows NTFS 快速权限锁和解除锁定。
-- 路径穿越防护、符号链接拒绝和失败回滚。
-- 中英文 UI 切换，语言偏好保存在本机。
-- 完全离线运行，不需要服务端、账号或网络连接。
+- Creates and restores `.locked` containers.
+- Reads supported legacy container versions.
+- Rejects symbolic links and unsafe paths.
+- Prevents archive path traversal during restore.
+- Avoids leaving a partial output directory when authentication or restoration fails.
+- Deliberately keeps the source folder after encryption.
 
-### 安装方法
+Verify a real restore before deleting the source yourself. A forgotten password cannot be recovered.
 
-下载 Release 中的 `folder-locker-v1.0.0-windows-x64.exe` 后直接运行，或下载 `folder-locker-v1.0.0-windows-x64.zip` 解压后运行其中的 EXE。
+### Windows quick lock (advanced)
 
-EXE 未进行数字签名。请使用 Release 中的 `SHA256SUMS.txt` 校验文件完整性。
+The optional quick mode applies an NTFS ACL deny rule and obfuscates names to restrict the current user's access. It includes metadata and rollback behavior so it can restore names and permissions.
 
-### 使用方法
+This mode is **not encryption**. Administrators, owners, or users who understand ACLs may bypass it. Use the encrypted container mode for confidentiality.
 
-#### 强加密容器
+## Other Features
 
-1. 打开“加密容器（推荐）”标签。
-2. 选择源文件夹。
-3. 设置 `.locked` 容器输出路径。
-4. 输入并确认密码。
-5. 点击“创建加密容器”。
-6. 需要恢复时选择 `.locked` 文件、恢复目录和密码，点击“解密并恢复”。
+- Bilingual Chinese/English Tkinter UI.
+- Local language preference stored by `src/utility_suite/settings.py`.
+- Background file operations with progress reporting.
+- Fully offline operation with no server, account, telemetry, browser, or runtime network requirement.
+- Windows single-file EXE, portable ZIP, and SHA256 release output.
 
-忘记密码无法恢复加密容器。
+## Requirements and Source Setup
 
-#### Windows 快速权限锁
-
-1. 打开“Windows 快速锁定（高级）”标签。
-2. 选择目标文件夹。
-3. 输入并确认密码。
-4. 点击“应用快速锁定”。
-5. 解锁时选择同一文件夹并输入密码，点击“解除快速锁定”。
-
-此模式只修改 NTFS 权限并混淆名称，不加密文件内容。
-
-### 打包说明
+- Python 3.10 or newer.
+- Windows for the Tkinter application, NTFS quick lock, and packaged executable.
+- `cryptography>=42` at runtime.
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build.ps1
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe -m folder_locker.app
 ```
 
-构建脚本会先运行测试和 `compileall`，再使用 PyInstaller 生成 Windows 单文件 EXE、便携 ZIP 和 SHA256 校验文件。
+The quick-lock tab is Windows/NTFS-specific. The encrypted container implementation is still presented by a Windows desktop application in this repository.
 
-### 作者信息
+## Use
 
-- Author: HaoXiang Huang
-- Email: didadida1688@gmail.com
-- Homepage: https://nextweb4.github.io/
-- GitHub: https://github.com/NextWeb4
+### Create an encrypted container
 
-### License
-
-MIT License
-
-## English
-
-Folder Locker is an offline Windows folder locking tool with two modes:
-
-1. **Strong encrypted container mode (recommended)**: copies a folder into a `.locked` container, derives a key with PBKDF2-HMAC-SHA256, and streams filenames and file data through AES-256-GCM.
-2. **Windows quick permission lock mode (advanced)**: uses an NTFS ACL deny rule and filename obfuscation to restrict the current user's access quickly. This mode is not encryption.
-
-The encrypted container mode deliberately keeps the source folder to prevent data loss. Verify that the container restores correctly before deleting the source yourself.
-
-### Features
-
-- Create AES-256-GCM `.locked` encrypted containers.
-- Restore folders from `.locked` containers.
-- Read legacy containers.
-- Apply and remove Windows NTFS quick locks.
-- Path traversal protection, symlink rejection, and rollback on failure.
-- Switch between Chinese and English; the preference is stored locally.
-- Fully offline; no server, account, or network connection is required.
-
-### Installation
-
-Download `folder-locker-v1.0.0-windows-x64.exe` from the Release page and run it directly, or download `folder-locker-v1.0.0-windows-x64.zip`, extract it, and run the EXE inside.
-
-The EXE is not digitally signed. Verify file integrity with `SHA256SUMS.txt` from the Release page.
-
-### Usage
-
-#### Strong Encrypted Container
-
-1. Open the "Encrypted container (recommended)" tab.
-2. Choose the source folder.
-3. Set the `.locked` container output path.
-4. Enter and confirm a password.
-5. Click "Create encrypted container".
-6. To restore, choose the `.locked` file, output folder, and password, then click "Decrypt and restore".
-
-Forgotten passwords cannot be recovered.
-
-#### Windows Quick Permission Lock
-
-1. Open the "Windows quick lock (advanced)" tab.
-2. Choose the target folder.
+1. Open **Encrypted container (recommended)**.
+2. Select the source folder and destination `.locked` file.
 3. Enter and confirm a password.
-4. Click "Apply quick lock".
-5. To unlock, choose the same folder and enter the password, then click "Remove quick lock".
+4. Create the container.
+5. Restore it to a separate folder and verify the files before deleting anything manually.
 
-This mode only changes NTFS permissions and obfuscates names. It does not encrypt file contents.
+### Restore a container
 
-### Packaging
+1. Select the `.locked` file.
+2. Choose a new restore directory.
+3. Enter the password and start restoration.
+
+### Apply or remove a quick lock
+
+1. Open **Windows quick lock (advanced)**.
+2. Choose the target folder and enter/confirm the password to lock it.
+3. To unlock it, select the same folder and enter the password used for its metadata.
+
+Do not use a drive root, symbolic link, or folder whose contents you cannot afford to recover independently.
+
+## Test and Verify
+
+```powershell
+$env:PYTHONPATH = "src"
+python -m unittest discover -s tests -v
+python -m compileall -q src scripts tests
+.\tests\run_ui_smoke.ps1
+```
+
+Use `.\tests\run_ui_smoke.ps1 -SkipLaunch` only when no interactive desktop is available. There is no separate lint or format command.
+
+## Build a Release
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/build.ps1
 ```
 
-The build script runs tests and `compileall`, then uses PyInstaller to create a Windows single-file EXE, portable ZIP, and SHA256 checksums.
+The build script runs tests and `compileall`, then uses PyInstaller 6.20.0 to create:
 
-### Author
+```text
+release-assets\folder-locker-v1.0.0-windows-x64.exe
+release-assets\folder-locker-v1.0.0-windows-x64.zip
+release-assets\SHA256SUMS.txt
+```
 
-- Author: HaoXiang Huang
-- Email: didadida1688@gmail.com
-- Homepage: https://nextweb4.github.io/
-- GitHub: https://github.com/NextWeb4
+No MSI is generated because the repository has no installer project. Release executables are not digitally signed; verify downloads with `SHA256SUMS.txt`. The portable ZIP contains the EXE, README, LICENSE, and third-party notices.
 
-### License
+## Project Structure
 
-MIT License
+| Path | Responsibility |
+| --- | --- |
+| `src/folder_locker/core.py` | Container format, PBKDF2/AES-GCM, safe paths, name obfuscation, ACL commands, metadata, and rollback |
+| `src/folder_locker/app.py` | Bilingual Tkinter UI, validation, background workers, progress, and messages |
+| `src/utility_suite/` | Application identity and local language settings only |
+| `tests/test_folder_locker.py` | Container, path, ACL, and failure-behavior regression coverage |
+| `tests/run_ui_smoke.ps1` | Built GUI, ZIP, and metadata smoke checks |
+| `scripts/build.ps1` | Test, compile, PyInstaller, portable ZIP, and checksum pipeline |
+| `resources/folder-locker-version.txt` | Windows executable version resources |
+| `docs/open-source-audit.md` | Dependency, license, compatibility, and packaging audit |
+
+## Data Safety and Security
+
+- Encryption never deletes or overwrites the source folder automatically.
+- Container restoration must authenticate data and constrain every output path to the chosen destination.
+- Passwords, derived keys, local paths, container contents, and ACL metadata must not enter logs, source control, or release archives.
+- Quick-lock metadata is required for straightforward recovery; do not delete it casually.
+- Unsigned PyInstaller executables may trigger Windows SmartScreen or antivirus warnings. Metadata is not a substitute for a digital signature.
+
+## Author
+
+- HaoXiang Huang
+- [didadida1688@gmail.com](mailto:didadida1688@gmail.com)
+- <https://nextweb4.github.io/>
+- <https://github.com/NextWeb4>
+
+## License
+
+Folder Locker is licensed under the [MIT License](LICENSE). `cryptography` is distributed under Apache-2.0 or BSD terms; PyInstaller uses GPL-2.0-or-later with a bootloader exception. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

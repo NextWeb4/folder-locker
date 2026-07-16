@@ -1,51 +1,72 @@
-# 项目协作规则
+# AGENTS.md
 
-## 1. 项目结构
-- 当前项目是从 `offline-utility-suite` 独立出来的完整 Folder Locker：包含 AES-256-GCM 强加密容器和 Windows NTFS 快速权限锁两种模式。
-- 应用源码放在 `src/folder_locker/`；共享作者/设置模块放在 `src/utility_suite/`；测试放在 `tests/`；构建脚本放在 `scripts/`；版本资源放在 `resources/`；发布产物只放在被 Git 忽略的 `release-assets/`。
-- 原始 EXE 和旧套件仓库只作为行为来源，不复制进本仓库。
+## 1. Project structure
 
-## 2. 运行命令
-- 源码运行前设置 `$env:PYTHONPATH='src'`，再运行 `python -m folder_locker.app`。
-- GUI 必须保持离线运行，不得要求浏览器、服务端、账号或网络连接。
+- `src/folder_locker/core.py` owns container formats, cryptography, path validation, name obfuscation, ACL calls, metadata, and rollback.
+- `src/folder_locker/app.py` owns the bilingual Tkinter UI, validation, background workers, progress, and user messages.
+- `src/utility_suite/` stores application identity and local language preference only.
+- `tests/`, `scripts/`, `resources/`, and `docs/open-source-audit.md` own regression coverage, release tooling, executable metadata, and dependency decisions respectively.
+- Generated artifacts belong only in ignored `release-assets/` and build directories.
 
-## 3. 测试命令
-- 自动测试：`$env:PYTHONPATH='src'; python -m unittest discover -s tests -v`。
-- 构建后 GUI/ZIP/元数据烟雾测试：`.\tests\run_ui_smoke.ps1`；无交互桌面或 CI 可使用 `-SkipLaunch`。
-- 当前未发现独立 lint / format 命令；提交前至少运行 `python -m compileall -q src scripts tests`。
+## 2. Run commands
 
-## 4. 构建命令
-- 构建命令：`powershell -ExecutionPolicy Bypass -File scripts/build.ps1`。
-- 构建脚本必须先运行测试和 `compileall`，再生成 Windows 单文件 EXE、便携 ZIP 和 SHA256。
-- 不强行生成 MSI；没有安装器工程时只发布 EXE 和 ZIP。
+- Set `$env:PYTHONPATH='src'`, then run `python -m folder_locker.app`.
+- Install runtime dependencies from `requirements.txt`; do not assume the build-only `requirements-dev.txt` is needed for normal execution.
+- GUI operation must remain offline and must not require a browser, account, server, telemetry, or remote resource.
 
-## 5. 代码风格
-- Python 使用 UTF-8、4 空格缩进、类型提示和小函数；核心加密/ACL/路径安全逻辑不得写进 UI 回调。
-- UI 文案集中在 `src/folder_locker/app.py` 的 `TEXT` 映射；新增文案必须中英文同步。
-- 新增依赖必须先完成兼容性、许可证、体积、维护状态和离线边界审计。
+## 3. Test commands
 
-## 6. 模块边界
-- `src/folder_locker/core.py` 负责容器格式、AES-GCM 加解密、PBKDF2、路径安全、名称混淆、元数据、`icacls` 调用和失败回滚。
-- `src/folder_locker/app.py` 只负责 Tkinter UI、输入校验、后台线程和用户提示。
-- `src/utility_suite/settings.py` 只保存本机语言偏好，不得保存密码、令牌或被锁文件夹列表。
+- Run automated tests with `$env:PYTHONPATH='src'; python -m unittest discover -s tests -v`.
+- Run built GUI/ZIP/metadata smoke tests with `.\tests\run_ui_smoke.ps1`; use `-SkipLaunch` only without an interactive desktop.
+- Run `python -m compileall -q src scripts tests` before completion.
+- No lint/format command was found in the current repository; add and document one before claiming a lint/format gate.
 
-## 7. 禁止事项
-- 不得提交 `.env`、令牌、密钥、凭据、本机路径缓存、构建目录、Release 资产或测试产生的容器/恢复目录。
-- 不得把 ACL 快速锁描述为强加密；强加密只指 AES-256-GCM 加密容器模式。
-- 不得采用不可逆删除/覆盖流程；加密成功后必须保留源文件夹，由用户验证恢复后自行删除。
-- 不得伪造数字签名；无证书时只设置作者、版权、产品名、公司名和版本元数据。
+## 4. Build commands
 
-## 8. 完成标准
-- 项目包含可维护源码、双语 UI、双语 README、MIT License、作者信息、依赖审计、构建脚本、测试和 Release Notes。
-- 强加密模式必须能创建 `.locked` 容器并恢复文件夹；ACL 模式必须能失败回滚并正确恢复名称。
-- Release 资产必须包含 EXE、ZIP 和 `SHA256SUMS.txt`。
+- Build with `powershell -ExecutionPolicy Bypass -File scripts/build.ps1`.
+- The script must test and compile first, then generate the Windows x64 single-file EXE, portable ZIP, and `SHA256SUMS.txt`.
+- Do not add an MSI unless an installer project and its compatibility/license/rollback audit are added first.
 
-## 9. Review 标准
-- Review 必须核对：AES-GCM nonce/AAD、PBKDF2 参数、容器路径穿越防护、SRT/旧功能无关代码是否混入、ACL Windows-only 边界、drive root 禁止、symlink 拒绝、元数据版本、失败回滚和作者元数据。
-- 修改 `core.py` 必须增加或更新回归测试；仅凭 GUI 外观不得判定功能正确。
+## 5. Code style
 
-## 10. 常见风险
-- 忘记密码无法恢复强加密容器；文档必须明确。
-- ACL 快速锁只是权限控制和名称混淆，不等于加密，可能被管理员或所有者绕过。
-- PyInstaller 未签名单文件包可能被安全软件误报；发布说明必须明确未签名和 SHA256 校验方式。
-- 解锁依赖元数据文件，删除元数据会增加恢复难度。
+- Use UTF-8, four-space indentation, type hints, and small functions.
+- Keep cryptography, ACL, path safety, and container parsing out of UI callbacks.
+- Keep all bilingual UI text synchronized in the `TEXT` mapping in `src/folder_locker/app.py`.
+- New dependencies require compatibility, license, size, maintenance, offline-network, packaging, and rollback review.
+
+## 6. Module boundaries
+
+- Core must preserve authenticated AES-256-GCM container behavior, PBKDF2 key derivation, safe restore paths, symlink rejection, and failure cleanup.
+- App may validate inputs and invoke Core on background threads; it must not implement encryption, container framing, ACL commands, or irreversible deletion.
+- `src/utility_suite/settings.py` may store language preference only, never passwords, folder lists, keys, tokens, or recovery metadata.
+- Quick-lock operations must remain Windows/NTFS-specific and must restore permissions/names or roll back on failure.
+
+## 7. Prohibited changes
+
+- Never commit secrets, local paths, containers, recovered folders, ACL metadata, build caches, or release files.
+- Never describe NTFS quick lock as encryption or a protection against administrators/owners.
+- Never delete or overwrite the source folder after encryption; the user verifies restoration and decides what to remove.
+- Never allow drive roots, symbolic links, path traversal, unauthenticated restoration output, or partial recovery directories.
+- Never fake a digital signature; product/version metadata is permitted but must be described accurately.
+
+## 8. Completion criteria
+
+- Container creation and restoration pass regression tests, including wrong-password, corrupted-container, legacy-read, symlink, traversal, and failure-cleanup cases.
+- ACL lock/unlock is reversible and rollback behavior is tested on Windows.
+- Unit tests, `compileall`, applicable UI smoke, archive inspection, executable metadata, and checksums pass.
+- README and release notes retain the source-retention, forgotten-password, quick-lock limitation, unsigned-binary, and SHA256 warnings.
+
+## 9. Review criteria
+
+- Review AES-GCM nonce/AAD use, PBKDF2 parameters, container version parsing, authentication-before-commit, output containment, symlink handling, and temporary-file cleanup.
+- Review ACL drive-root rejection, metadata recovery, Windows-only behavior, name restoration, and rollback.
+- Any `core.py` change requires regression coverage; GUI appearance alone is not evidence of correctness.
+- Packaging review must verify author/version resources, portable contents, third-party notices, unsigned status, and SHA256 coverage.
+
+## 10. Common risks
+
+- Lost passwords make encrypted containers unrecoverable.
+- ACL quick lock is access control and obfuscation, not cryptographic confidentiality.
+- Deleting quick-lock metadata complicates recovery.
+- Unsafe restore paths or symlinks can write outside the selected directory if validation regresses.
+- Unsigned PyInstaller one-file executables may trigger SmartScreen or antivirus warnings.
