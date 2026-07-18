@@ -1,4 +1,8 @@
-[English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+<p align="center">
+  <a href="README.md"><img src="https://img.shields.io/badge/English-0969da?style=flat-square" alt="English"></a>
+  <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-c8102e?style=flat-square" alt="简体中文"></a>
+  <a href="README.ja.md"><img src="https://img.shields.io/badge/%E6%97%A5%E6%9C%AC%E8%AA%9E-8250df?style=flat-square" alt="日本語"></a>
+</p>
 
 # Folder Locker
 
@@ -126,6 +130,13 @@ No MSI is generated because the repository has no installer project. Release exe
 - Passwords, derived keys, local paths, container contents, and ACL metadata must not enter logs, source control, or release archives.
 - Quick-lock metadata is required for straightforward recovery; do not delete it casually.
 - Unsigned PyInstaller executables may trigger Windows SmartScreen or antivirus warnings. Metadata is not a substitute for a digital signature.
+
+## Maintenance and Contributions
+
+- Cryptography, container compatibility, safe restoration, ACL, or rollback changes belong in `src/folder_locker/core.py` and require focused cases in `tests/test_folder_locker.py`; the Tkinter layer must remain presentation and background-task coordination only.
+- Keep Chinese and English application strings synchronized, and keep all three README versions aligned when behavior, commands, artifacts, security limits, or licensing changes.
+- Run the unit tests, `compileall`, and the applicable UI smoke before review. Release work must also rebuild the EXE/ZIP, inspect their contents and metadata, and verify `SHA256SUMS.txt`.
+- Review [the open-source audit](docs/open-source-audit.md) before changing dependencies or packaging; preserve fully offline runtime behavior.
 
 ## Author
 

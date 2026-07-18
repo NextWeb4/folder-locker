@@ -28,7 +28,8 @@
 - Do not add an MSI unless an installer project and its compatibility/license/rollback audit are added first.
 
 ## 5. Code style
-
+- Keep the opening centered language badge row byte-for-byte identical across `README.md`, `README.zh-CN.md`, and `README.ja.md`; preserve the Shields URLs and native labels `English`, `简体中文`, and `日本語`.
+- Keep the three README documents in the same section order with matching commands, paths, versions, links, images, numeric facts, and code fences; translate prose and headings naturally.
 - Use UTF-8, four-space indentation, type hints, and small functions.
 - Keep cryptography, ACL, path safety, and container parsing out of UI callbacks.
 - Keep all bilingual UI text synchronized in the `TEXT` mapping in `src/folder_locker/app.py`.
@@ -57,7 +58,8 @@
 - README and release notes retain the source-retention, forgotten-password, quick-lock limitation, unsigned-binary, and SHA256 warnings.
 
 ## 9. Review criteria
-
+- Confirm the three opening language badge rows are identical and render the labels inside SVG images rather than browser-translatable text.
+- Compare all three README versions for matching facts, section order, commands, paths, links, images, numbers, and code fences.
 - Review AES-GCM nonce/AAD use, PBKDF2 parameters, container version parsing, authentication-before-commit, output containment, symlink handling, and temporary-file cleanup.
 - Review ACL drive-root rejection, metadata recovery, Windows-only behavior, name restoration, and rollback.
 - Any `core.py` change requires regression coverage; GUI appearance alone is not evidence of correctness.

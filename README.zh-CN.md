@@ -1,4 +1,8 @@
-[English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+<p align="center">
+  <a href="README.md"><img src="https://img.shields.io/badge/English-0969da?style=flat-square" alt="English"></a>
+  <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-c8102e?style=flat-square" alt="简体中文"></a>
+  <a href="README.ja.md"><img src="https://img.shields.io/badge/%E6%97%A5%E6%9C%AC%E8%AA%9E-8250df?style=flat-square" alt="日本語"></a>
+</p>
 
 # Folder Locker
 
@@ -126,6 +130,13 @@ release-assets\SHA256SUMS.txt
 - 密码、派生 Key、本机路径、容器内容和 ACL 元数据不得进入日志、源码仓库或发布包。
 - 快速恢复依赖锁定元数据，不要随意删除。
 - 未签名 PyInstaller EXE 可能触发 Windows SmartScreen 或安全软件提示；版本元数据不等同于数字签名。
+
+## 维护与贡献
+
+- 加密、容器兼容、安全恢复、ACL 或回滚修改应放在 `src/folder_locker/core.py`，并在 `tests/test_folder_locker.py` 增加针对性用例；Tkinter 层只负责界面与后台任务编排。
+- 中英文应用文案必须同步；行为、命令、产物、安全限制或许可变化时，三份 README 也必须保持一致。
+- Review 前运行单元测试、`compileall` 和适用的 UI 冒烟；发布工作还需要重建 EXE/ZIP、检查内容与元数据，并验证 `SHA256SUMS.txt`。
+- 修改依赖或打包前先查看[开源审计](docs/open-source-audit.md)，并保持运行时完全离线。
 
 ## 作者
 
