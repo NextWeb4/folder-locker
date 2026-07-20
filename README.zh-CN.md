@@ -31,7 +31,7 @@ Folder Locker 会把源文件夹复制到 `.locked` 容器，使用 PBKDF2-HMAC-
 
 ### Windows 快速锁定（高级）
 
-快速模式通过 NTFS ACL deny 规则和名称混淆限制当前用户访问，并使用元数据与回滚逻辑恢复名称和权限。
+快速模式通过 NTFS ACL 拒绝规则和名称混淆限制当前用户访问，并使用元数据与回滚逻辑恢复名称和权限。
 
 该模式**不是加密**。管理员、所有者或熟悉 ACL 的用户可能绕过它。需要保密时应使用加密容器模式。
 
@@ -87,8 +87,8 @@ $env:PYTHONPATH = "src"
 
 ```powershell
 $env:PYTHONPATH = "src"
-python -m unittest discover -s tests -v
-python -m compileall -q src scripts tests
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m compileall -q src scripts tests
 .\tests\run_ui_smoke.ps1
 ```
 
@@ -97,7 +97,8 @@ python -m compileall -q src scripts tests
 ## 构建发布版
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build.ps1
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+powershell -ExecutionPolicy Bypass -File scripts/build.ps1 -Python .\.venv\Scripts\python.exe
 ```
 
 构建脚本先运行测试和 `compileall`，再使用 PyInstaller 6.20.0 生成：
@@ -127,7 +128,7 @@ release-assets\SHA256SUMS.txt
 
 - 加密流程不会自动删除或覆盖源文件夹。
 - 容器恢复必须验证数据，并把每个输出路径限制在所选目标目录内。
-- 密码、派生 Key、本机路径、容器内容和 ACL 元数据不得进入日志、源码仓库或发布包。
+- 密码、派生密钥、本机路径、容器内容和 ACL 元数据不得进入日志、源码仓库或发布包。
 - 快速恢复依赖锁定元数据，不要随意删除。
 - 未签名 PyInstaller EXE 可能触发 Windows SmartScreen 或安全软件提示；版本元数据不等同于数字签名。
 
@@ -135,7 +136,7 @@ release-assets\SHA256SUMS.txt
 
 - 加密、容器兼容、安全恢复、ACL 或回滚修改应放在 `src/folder_locker/core.py`，并在 `tests/test_folder_locker.py` 增加针对性用例；Tkinter 层只负责界面与后台任务编排。
 - 中英文应用文案必须同步；行为、命令、产物、安全限制或许可变化时，三份 README 也必须保持一致。
-- Review 前运行单元测试、`compileall` 和适用的 UI 冒烟；发布工作还需要重建 EXE/ZIP、检查内容与元数据，并验证 `SHA256SUMS.txt`。
+- 审查前运行单元测试、`compileall` 和适用的 UI 冒烟；发布工作还需要重建 EXE/ZIP、检查内容与元数据，并验证 `SHA256SUMS.txt`。
 - 修改依赖或打包前先查看[开源审计](docs/open-source-audit.md)，并保持运行时完全离线。
 
 ## 作者
@@ -147,4 +148,4 @@ release-assets\SHA256SUMS.txt
 
 ## 许可证
 
-Folder Locker 使用 [MIT License](LICENSE)。`cryptography` 使用 Apache-2.0 或 BSD 条款；PyInstaller 使用带 Bootloader Exception 的 GPL-2.0-or-later。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+Folder Locker 使用 [MIT License](LICENSE)。`cryptography` 使用 Apache-2.0 或 BSD 条款；PyInstaller 使用带引导程序例外的 GPL-2.0-or-later。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

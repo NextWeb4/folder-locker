@@ -87,8 +87,8 @@ Do not use a drive root, symbolic link, or folder whose contents you cannot affo
 
 ```powershell
 $env:PYTHONPATH = "src"
-python -m unittest discover -s tests -v
-python -m compileall -q src scripts tests
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+.\.venv\Scripts\python.exe -m compileall -q src scripts tests
 .\tests\run_ui_smoke.ps1
 ```
 
@@ -97,7 +97,8 @@ Use `.\tests\run_ui_smoke.ps1 -SkipLaunch` only when no interactive desktop is a
 ## Build a Release
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/build.ps1
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+powershell -ExecutionPolicy Bypass -File scripts/build.ps1 -Python .\.venv\Scripts\python.exe
 ```
 
 The build script runs tests and `compileall`, then uses PyInstaller 6.20.0 to create:

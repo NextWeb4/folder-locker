@@ -23,7 +23,8 @@
 
 ## 4. Build commands
 
-- Build with `powershell -ExecutionPolicy Bypass -File scripts/build.ps1`.
+- Build with `powershell -ExecutionPolicy Bypass -File scripts/build.ps1 -Python .\.venv\Scripts\python.exe` so packaging uses the audited environment.
+- Install build-only dependencies from `requirements-dev.txt` before invoking the build script; normal execution still requires only `requirements.txt`.
 - The script must test and compile first, then generate the Windows x64 single-file EXE, portable ZIP, and `SHA256SUMS.txt`.
 - Do not add an MSI unless an installer project and its compatibility/license/rollback audit are added first.
 
