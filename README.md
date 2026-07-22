@@ -1,6 +1,3 @@
-
-
-
 <p align="center">
   <a href="README.md"><img src="https://img.shields.io/badge/English-0969da?style=flat-square" alt="English"></a>
   <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-c8102e?style=flat-square" alt="简体中文"></a>
@@ -152,3 +149,5 @@ No MSI is generated because the repository has no installer project. Release exe
 ## License
 
 Folder Locker is licensed under the [MIT License](LICENSE). `cryptography` is distributed under Apache-2.0 or BSD terms; PyInstaller uses GPL-2.0-or-later with a bootloader exception. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+

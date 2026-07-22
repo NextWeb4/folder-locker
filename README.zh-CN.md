@@ -1,6 +1,3 @@
-
-
-
 <p align="center">
   <a href="README.md"><img src="https://img.shields.io/badge/English-0969da?style=flat-square" alt="English"></a>
   <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-c8102e?style=flat-square" alt="简体中文"></a>
@@ -152,3 +149,5 @@ release-assets\SHA256SUMS.txt
 ## 许可证
 
 Folder Locker 使用 [MIT License](LICENSE)。`cryptography` 使用 Apache-2.0 或 BSD 条款；PyInstaller 使用带引导程序例外的 GPL-2.0-or-later。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
+
