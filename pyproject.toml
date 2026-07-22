@@ -1,3 +1,6 @@
+
+
+
 [project]
 name = "folder-locker"
 version = "1.0.0"
@@ -6,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-  { name = "HaoXiang Huang", email = "didadida1688@gmail.com" }
+  { name = "HaoXiang Huang", email = "Rays688888@Gmail.com" }
 ]
 keywords = ["folder-locker", "encryption", "aes-gcm", "tkinter", "windows", "ntfs"]
 dependencies = [

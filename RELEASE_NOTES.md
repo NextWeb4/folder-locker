@@ -1,3 +1,6 @@
+
+
+
 # Initial Clean Release v1.0.0
 
 ## 中文
@@ -13,7 +16,7 @@
 强加密容器模式使用 PBKDF2-HMAC-SHA256 与 AES-256-GCM。Windows 快速权限锁模式只修改 NTFS 权限并混淆名称，不是加密。EXE 未进行数字签名；作者、版权、产品名和版本元数据已写入。请校验 SHA256 后使用。
 
 作者：HaoXiang Huang
-邮箱：didadida1688@gmail.com
+邮箱：Rays688888@Gmail.com
 主页：https://nextweb4.github.io/
 GitHub：https://github.com/NextWeb4
 
@@ -30,6 +33,6 @@ This is the first standalone release of Folder Locker. It is split out from the 
 The strong encrypted container mode uses PBKDF2-HMAC-SHA256 and AES-256-GCM. The Windows quick permission lock mode only changes NTFS permissions and obfuscates names; it is not encryption. The EXE is not digitally signed; author, copyright, product, and version metadata are present. Verify SHA256 before use.
 
 Author: HaoXiang Huang
-Email: didadida1688@gmail.com
+Email: Rays688888@Gmail.com
 Homepage: https://nextweb4.github.io/
 GitHub: https://github.com/NextWeb4

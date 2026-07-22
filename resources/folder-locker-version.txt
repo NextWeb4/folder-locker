@@ -1,3 +1,6 @@
+
+
+
 VSVersionInfo(
   ffi=FixedFileInfo(
     filevers=(1, 0, 0, 0),
@@ -22,7 +25,7 @@ VSVersionInfo(
           StringStruct('OriginalFilename', 'folder-locker.exe'),
           StringStruct('ProductName', 'Folder Locker'),
           StringStruct('ProductVersion', '1.0.0'),
-          StringStruct('Comments', 'HaoXiang Huang | didadida1688@gmail.com | https://nextweb4.github.io/')
+          StringStruct('Comments', 'HaoXiang Huang | Rays688888@Gmail.com | https://nextweb4.github.io/')
         ]
       )
     ]),
